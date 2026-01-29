@@ -1,1 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Octopus 💡 - Understanding Global Control Structures</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --light-text: #e0e0e0;
+            --glow-color: #ffd700;
+            --accent-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --tentacle-1: #ff6b6b;
+            --tentacle-2: #4ecdc4;
+            --tentacle-3: #ffd166;
+            --tentacle-4: #06d6a0;
+            --tentacle-5: #118ab2;
+            --tentacle-6: #ef476f;
+            --tentacle-7: #8338ec;
+            --tentacle-8: #ff9e00;
+            --disinfo-color: #ff4757;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%), linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9));
+            z-index: -1;
+            animation: subtlePulse 10s infinite alternate ease-in-out;
+        }
+        
+        @keyframes subtlePulse { 0% { opacity: 0.8; } 100% { opacity: 1; } }
+        
+        /* Navigation Styles - TOP MENU */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px auto 0;
+            padding: 15px 20px;
+            max-width: 1000px;
+            position: relative;
+        }
+        
+        .main-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+        }
+        
+        .nav-link {
+            color: var(--light-text);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--glow-color);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+        
+        .nav-link:hover {
+            color: var(--glow-color);
+            text-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        
+        .nav-link:hover::before {
+            width: 100%;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-link:hover i {
+            opacity: 1;
+        }
+        
+        /* Navigation Styles - BOTTOM MENU */
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 0 auto 25px;
+            padding: 0 20px;
+        }
+        
+        .footer-nav-link {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9em;
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,215,0,0.1);
+            background: rgba(20,20,20,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-nav-link:hover {
+            color: var(--glow-color);
+            border-color: rgba(255,215,0,0.4);
+            background: rgba(255,215,0,0.05);
+            box-shadow: 0 0 15px rgba(255,215,0,0.2);
+        }
+        
+        /* Disinformation Section */
+        .disinfo-section {
+            background: linear-gradient(135deg, rgba(255,71,87,0.1), rgba(255,71,87,0.05));
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,71,87,0.3);
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .disinfo-section::before {
+            content: 'DISINFORMATION ANALYSIS';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--disinfo-color);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        
+        .disinfo-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.6em;
+            color: var(--disinfo-color);
+            margin: 0 0 15px 0;
+            text-shadow: 0 0 15px rgba(255,71,87,0.6);
+            border-bottom: 2px solid rgba(255,71,87,0.3);
+            padding-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .disinfo-header:hover {
+            text-shadow: 0 0 20px rgba(255,71,87,0.8);
+        }
+        
+        .disinfo-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+        }
+        
+        .disinfo-summary {
+            background: rgba(255,71,87,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 0 25px 0;
+            border-left: 3px solid var(--disinfo-color);
+            font-style: italic;
+        }
+        
+        /* Methodology Section - Compact */
+        .methodology {
+            background: linear-gradient(135deg, rgba(15,15,15,0.9), rgba(25,25,25,0.9));
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,215,0,0.2);
+            margin: 30px auto 40px;
+            max-width: 1000px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .methodology h3 {
+            color: var(--glow-color);
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            padding-bottom: 8px;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        
+        .methodology-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .method-item {
+            background: rgba(30,30,30,0.6);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--glow-color);
+            font-size: 0.9em;
+        }
+        
+        .method-item i {
+            color: var(--glow-color);
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+        
+        .entity-list-note {
+            font-style: italic;
+            color: rgba(255,215,0,0.8);
+            background: rgba(255,215,0,0.05);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 3px solid var(--glow-color);
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+        
+        header {
+            position: static;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+            padding: 30px 20px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            font-style: italic;
+            color: var(--accent-color);
+            margin: 10px 0;
+            text-shadow: 0 0 20px rgba(255,215,0,0.4);
+            letter-spacing: 2px;
+            animation: glowFadeIn 2s ease-in-out;
+        }
+        
+        @keyframes glowFadeIn {
+            from { opacity: 0; text-shadow: 0 0 0 transparent; }
+            to { opacity: 1; text-shadow: 0 0 20px rgba(255,215,0,0.4); }
+        }
+        
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3em;
+            color: var(--glow-color);
+            margin: 0 auto 20px;
+            max-width: 800px;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+            line-height: 1.4;
+        }
+        
+        /* FIXED: Octopus Visualization */
+        .octopus-viz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px auto;
+            padding: 20px;
+            position: relative;
+            max-width: 800px;
+            height: 400px; /* Increased height for better tentacle spacing */
+        }
 
+        /* Executive Summary Styling */
+.executive-summary {
+    background: linear-gradient(135deg, rgba(10,10,10,0.9), rgba(20,20,20,0.9));
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,215,0,0.2);
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,215,0,0.05);
+}
+
+.executive-summary p {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.7;
+}
+        .central-hub {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255,215,0,0.2), rgba(255,215,0,0.05));
+            border: 3px solid var(--glow-color);
+            border-radius: 50%;
+            position: absolute; /* Changed to absolute for precise centering */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 4s infinite;
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
+        }
+        
+        .central-hub span {
+            color: var(--glow-color);
+            font-weight: bold;
+            font-size: 0.9em;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .tentacle {
+            position: absolute;
+            width: 140px; /* Longer tentacles for better visual */
+            height: 4px;
+            background: linear-gradient(90deg, var(--tentacle-color), transparent);
+            transform-origin: 0% 50%; /* Start from left center */
+            top: 50%;
+            left: 50%;
+            z-index: 1;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tentacle:hover {
+            opacity: 1;
+            transform: scale(1.1); /* Scale entire tentacle, not just width/height */
+            box-shadow: 0 0 15px var(--tentacle-color);
+        }
+        
+        .tentacle-end {
+            position: absolute;
+            right: -10px;
+            top: -8px;
+            width: 20px;
+            height: 20px;
+            background: var(--tentacle-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .tentacle-label {
+            position: absolute;
+            right: -80px;
+            top: -20px;
+            width: 70px;
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--tentacle-color);
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(255,215,0,0.2); }
+            50% { box-shadow: 0 0 40px rgba(255,215,0,0.4); }
+            100% { box-shadow: 0 0 30px rgba(255,215,0,0.2); }
+        }
+        
+        /* Table of Contents */
+        .toc-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: rgba(20,20,20,0.8);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255,215,0,0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .toc-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--glow-color);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            padding-bottom: 10px;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .toc-item {
+            background: rgba(30,30,30,0.6);
+            border-left: 4px solid var(--tentacle-color);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .toc-item:hover {
+            transform: translateY(-3px);
+            background: rgba(40,40,40,0.8);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+        
+        .toc-item i {
+            color: var(--tentacle-color);
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .toc-item span {
+            color: var(--light-text);
+            font-weight: 600;
+        }
+        
+        /* Main Content Area */
+        #content {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 40px 30px;
+            background: rgba(18,18,18,0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px var(--shadow-color), inset 0 0 30px rgba(255,215,0,0.05);
+            animation: contentFadeIn 1.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #content::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.03) 0%, transparent 70%);
+            animation: rotateLight 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes rotateLight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @keyframes contentFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Enhanced Section Styling */
+        .tentacle-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(25,25,25,0.6);
+            border-radius: 10px;
+            border-left: 5px solid var(--tentacle-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tentacle-section:hover {
+            background: rgba(30,30,30,0.8);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        
+        /* Collapsible section headers */
+        .section-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.6em;
+            color: var(--tentacle-color);
+            margin: 0 0 15px 0;
+            text-shadow: 0 0 15px rgba(var(--tentacle-rgb),0.6);
+            border-bottom: 2px solid rgba(var(--tentacle-rgb),0.3);
+            padding-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .section-header:hover {
+            color: var(--glow-color);
+            text-shadow: 0 0 20px rgba(var(--tentacle-rgb),0.8);
+        }
+        
+        .section-header i {
+            margin-right: 15px;
+            opacity: 0.8;
+        }
+        
+        .collapse-icon {
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+            margin-left: 15px;
+        }
+        
+        .collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .expanded .section-content {
+            max-height: 5000px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+        
+        .section-summary {
+            background: rgba(var(--tentacle-rgb),0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 0 25px 0;
+            border-left: 3px solid var(--tentacle-color);
+            font-style: italic;
+        }
+        
+        .sub-branch {
+            background: rgba(35,35,35,0.7);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .sub-branch-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-style: italic;
+            font-size: 1.3em;
+            color: var(--tentacle-color);
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 10px rgba(var(--tentacle-rgb),0.4);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .sub-branch-header:hover {
+            color: var(--glow-color);
+            text-shadow: 0 0 15px rgba(var(--tentacle-rgb),0.6);
+        }
+        
+        .sub-branch-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .expanded .sub-branch-content {
+            max-height: 5000px;
+            opacity: 1;
+            margin-top: 10px;
+        }
+        
+        h4 {
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.1em;
+            color: var(--glow-color);
+            margin: 20px 0 10px 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        li::before {
+            content: '\f0eb';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--glow-color);
+            position: absolute;
+            left: 0;
+            opacity: 0.6;
+            font-size: 0.9em;
+        }
+        
+        .core-hub {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.05));
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,215,0,0.3);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .core-hub::before {
+            content: 'ANALYTICAL MODEL';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--glow-color);
+            color: black;
+            padding: 5px 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        
+        .core-hub-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.6em;
+            color: var(--glow-color);
+            margin: 0 0 15px 0;
+            text-shadow: 0 0 15px rgba(255,215,0,0.6);
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            padding-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .core-hub-header:hover {
+            text-shadow: 0 0 20px rgba(255,215,0,0.8);
+        }
+        
+        .core-hub-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .expanded .core-hub-content {
+            max-height: 5000px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+        
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .stat-box {
+            background: rgba(30,30,30,0.7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--glow-color);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            color: var(--glow-color);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px 20px 20px;
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 60px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+        }
+        
+        .copyright {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .final-question {
+            font-size: 1.6em;
+            font-style: italic;
+            font-weight: 600;
+            text-align: center;
+            margin: 60px auto 30px;
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255,215,0,0.6);
+            line-height: 1.4;
+            padding: 20px;
+            background: rgba(255,215,0,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+        
+        .timeline-button {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 14px 28px;
+            background: linear-gradient(to right, #ffd700, #ffeb3b);
+            color: #0a0a0a;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .timeline-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--glow-color);
+            color: black;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(255,215,0,0.8);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1em;
+                line-height: 1.6;
+            }
+            
+            header {
+                padding: 25px 15px 5px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1em;
+                padding: 0 10px;
+            }
+            
+            .main-nav {
+                gap: 20px;
+                margin: 20px auto 0;
+                padding: 15px 10px;
+                flex-wrap: wrap;
+            }
+            
+            .nav-link {
+                font-size: 1em;
+                padding: 8px 0;
+            }
+            
+            .footer-nav {
+                gap: 15px;
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+            
+            .footer-nav-link {
+                font-size: 0.85em;
+                padding: 6px 12px;
+            }
+            
+            .octopus-viz {
+                height: 300px;
+                margin: 20px auto;
+            }
+            
+            .central-hub {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .tentacle {
+                width: 100px;
+            }
+            
+            .tentacle-label {
+                right: -60px;
+                font-size: 0.7em;
+                width: 60px;
+            }
+            
+            .toc-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            #content {
+                padding: 25px 20px;
+                margin: 25px 15px;
+                border-radius: 12px;
+            }
+            
+            .section-header, .core-hub-header, .disinfo-header {
+                font-size: 1.4em;
+            }
+            
+            .sub-branch-header {
+                font-size: 1.2em;
+            }
+            
+            h4 {
+                font-size: 1em;
+            }
+            
+            .tentacle-section {
+                padding: 20px 15px;
+            }
+            
+            .methodology-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .final-question {
+                font-size: 1.3em;
+                margin: 40px auto 20px;
+                padding: 15px;
+            }
+            
+            .timeline-button {
+                font-size: 1em;
+                padding: 12px 24px;
+                width: 90%;
+                max-width: 300px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            footer {
+                padding: 20px 15px 15px;
+                font-size: 0.85em;
+                margin-top: 50px;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3em;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1em;
+            }
+            
+            .main-nav {
+                gap: 15px;
+                margin: 15px auto 0;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-link {
+                font-size: 0.95em;
+                padding: 10px 0;
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid rgba(255,215,0,0.1);
+            }
+            
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+            
+            .footer-nav {
+                gap: 10px;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-nav-link {
+                font-size: 0.8em;
+                padding: 5px 10px;
+                width: 80%;
+                text-align: center;
+            }
+            
+            .octopus-viz {
+                height: 250px;
+                margin: 15px auto;
+            }
+            
+            .central-hub {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .central-hub span {
+                font-size: 0.7em;
+                padding: 5px;
+            }
+            
+            .tentacle {
+                width: 80px;
+                height: 3px;
+            }
+            
+            .tentacle-end {
+                width: 15px;
+                height: 15px;
+                font-size: 0.6em;
+                right: -7px;
+                top: -6px;
+            }
+            
+            .tentacle-label {
+                right: -50px;
+                font-size: 0.6em;
+                width: 50px;
+                top: -15px;
+            }
+            
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header, .core-hub-header, .disinfo-header {
+                font-size: 1.2em;
+            }
+            
+            .sub-branch-header {
+                font-size: 1.1em;
+            }
+            
+            #content {
+                padding: 20px 15px;
+                margin: 20px 10px;
+            }
+            
+            .final-question {
+                font-size: 1.1em;
+            }
+            
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-to-top {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .main-nav, .footer-nav, .octopus-viz, .toc-container, .back-to-top, .timeline-button {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                font-size: 12pt;
+            }
+            
+            #content {
+                box-shadow: none;
+                background: white;
+                border: 1px solid #ddd;
+            }
+            
+            .section-header, .core-hub-header, .sub-branch-header, h4 {
+                color: black;
+                text-shadow: none;
+            }
+            
+            .section-content, .core-hub-content, .sub-branch-content {
+                max-height: none !important;
+                opacity: 1 !important;
+                display: block !important;
+                margin-top: 15px !important;
+            }
+            
+            .collapse-icon {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Octopus of Oppression</h1>
+        <div class="hero-subtitle">A Framework for Understanding Global Control Structures Through Eight Coordinated Tentacles of Power</div>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link"><i class="fas fa-eye"></i> The Octopus</a>
+            <a href="timeline.html" class="nav-link"><i class="fas fa-stream"></i> Timeline</a>
+            <a href="evidence.html" class="nav-link"><i class="fas fa-file-invoice"></i> Evidence</a>
+            <a href="plan.html" class="nav-link"><i class="fas fa-chess-board"></i> The Plan</a>
+            <a href="opposition.html" class="nav-link"><i class="fas fa-gavel"></i> Opposition</a>
+        </nav>
+    </header>
+
+    <!-- Octopus Visualization -->
+    <div class="octopus-viz">
+        <div class="central-hub">
+            <span>Central Nexus<br>Global Control</span>
+        </div>
+        <!-- Tentacles will be added via JavaScript -->
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats" style="max-width: 1000px; margin: 20px auto;">
+        <div class="stat-box">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Coordinated Tentacles</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">24+</div>
+            <div class="stat-label">Sub-Branches</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">150+</div>
+            <div class="stat-label">Documented Entities</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Years of Operations</div>
+        </div>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc-container">
+        <div class="toc-title"><i class="fas fa-sitemap"></i> The Octopus Framework</div>
+        <div class="toc-grid">
+            <a href="#core-hub" class="toc-item" style="--tentacle-color: var(--glow-color);">
+                <i class="fas fa-brain"></i>
+                <span>Core Hub</span>
+            </a>
+            <a href="#tentacle1" class="toc-item" style="--tentacle-color: var(--tentacle-1);">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Financial Domination</span>
+            </a>
+            <a href="#tentacle2" class="toc-item" style="--tentacle-color: var(--tentacle-2);">
+                <i class="fas fa-broadcast-tower"></i>
+                <span>Media Manipulation</span>
+            </a>
+            <a href="#tentacle3" class="toc-item" style="--tentacle-color: var(--tentacle-3);">
+                <i class="fas fa-landmark"></i>
+                <span>Political Infiltration</span>
+            </a>
+            <a href="#tentacle4" class="toc-item" style="--tentacle-color: var(--tentacle-4);">
+                <i class="fas fa-theater-masks"></i>
+                <span>Cultural Erosion</span>
+            </a>
+            <a href="#tentacle5" class="toc-item" style="--tentacle-color: var(--tentacle-5);">
+                <i class="fas fa-microchip"></i>
+                <span>Technological Overlordship</span>
+            </a>
+            <a href="#tentacle6" class="toc-item" style="--tentacle-color: var(--tentacle-6);">
+                <i class="fas fa-pills"></i>
+                <span>Medical-Pharmaceutical Empire</span>
+            </a>
+            <a href="#tentacle7" class="toc-item" style="--tentacle-color: var(--tentacle-7);">
+                <i class="fas fa-gas-pump"></i>
+                <span>Energy & Resource Control</span>
+            </a>
+            <a href="#tentacle8" class="toc-item" style="--tentacle-color: var(--tentacle-8);">
+                <i class="fas fa-seedling"></i>
+                <span>Food & Agriculture Control</span>
+            </a>
+        </div>
+    </div>
+
+    <div id="content">
+        <!-- Executive Summary -->
+        <div class="executive-summary">
+            <h2 style="--tentacle-color: var(--glow-color); text-align: center; border-bottom: none;">
+                <i class="fas fa-eye"></i> The Octopus Unveiled: An Overview
+            </h2>
+            <p>
+                <strong>The Octopus</strong> is a structural analysis framework revealing consistent patterns of systemic control across eight interconnected domains of global power. Our research identifies a coordinated network—termed the Central Nexus—that operates through eight distinct yet interconnected Tentacles of power: Financial, Media, Political, Cultural, Technological, Medical, Energy, and Agricultural. This analytical model demonstrates how these systems interact to concentrate power and influence modern society.
+            </p>
+            <p>
+                The available evidence, spanning over a century and involving more than 150 documented entities, shows a consistent pattern: the centralization of decision-making power, the erosion of national and cultural sovereignty, and the creation of institutional dependencies that limit autonomous action. This analysis does not presuppose a singular "conspiracy" but rather identifies structural incentives and documented coordination between ostensibly separate systems.
+            </p>
+            <p>
+                The ultimate objective suggested by this pattern analysis is the establishment of an integrated control framework—a system where human autonomy is systematically reduced through dependencies, populations are managed through predictive modeling, and resources flow toward increasingly centralized decision-making nodes.
+            </p>
+            <p style="font-style: italic; color: rgba(255,215,0,0.9); border-left: 3px solid var(--glow-color); padding-left: 15px;">
+                This site synthesizes decades of documented research to map the structural relationships, historical patterns, and institutional connections that constitute the Octopus framework. What follows is a detailed anatomy of its Core Hub and eight primary Tentacles. Explore them to understand <strong>not just who holds power, but the structural mechanisms that make that power possible and persistent.</strong>
+            </p>
+        </div>
+
+        <!-- Core Hub Section -->
+        <div class="core-hub" id="core-hub">
+            <div class="core-hub-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-brain"></i> Core Hub: The Central Nexus</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="core-hub-content">
+                <div class="section-summary" style="--tentacle-color: var(--glow-color); --tentacle-rgb: 255,215,0;">
+                    The analytical model posits a central coordination point—whether conscious or emergent—from which all eight tentacles receive direction. This framework helps explain observed policy continuity across generations and apparently disconnected domains.
+                </div>
+                <h3>Description</h3>
+                <p>The Central Nexus represents not a single organization but an emergent property of interconnected elite networks, think tanks, and institutional alliances. While the exact nature of this coordination remains debated, the following entities represent documented case studies of how such nexus-like coordination manifests through overlapping memberships, shared funding sources, and consistent policy advocacy across generations.</p>
+                
+                <div class="entity-list-note">
+                    <i class="fas fa-info-circle"></i> The following entities are presented as documented case studies of nexus-like coordination, demonstrating patterns of interlocking leadership, consistent policy advocacy, and historical continuity that suggest more than coincidental alignment.
+                </div>
+                
+                <h4>Documented Case Studies of Coordinated Influence</h4>
+                <ul>
+                    <li>Rothschild Family Network (documented influence in central banking since 18th century, with intergenerational continuity)</li>
+                    <li>Open Society Foundations Network (documented $32+ billion in coordinated philanthropic-political funding since 1979)</li>
+                    <li>Bilderberg Group Conclaves (documented annual private meetings since 1954 with consistent participant overlap across sectors)</li>
+                    <li>Trilateral Commission (documented policy coordination between North America, Europe, and Asia since 1973)</li>
+                    <li>Council on Foreign Relations (documented influence network with over 5,000 members across government, media, and finance)</li>
+                </ul>
+                <h4>Observed Coordination Tactics</h4>
+                <p>Documented patterns include: High-security private meetings with no public minutes (Bilderberg, Bohemian Grove), inherited influence networks within powerful families demonstrating multi-generational policy continuity, private communication channels (encrypted systems, private couriers) that avoid public scrutiny, strategic positioning during global inflection points (post-WWII Bretton Woods, post-9/11 security framework), complex financial obfuscation (shell companies, offshore trusts, philanthropic foundations as pass-through entities) documented in leaks like Panama Papers.</p>
+                <h4>Analytical Framework vs. Conspiracy Theory</h4>
+                <p>This model distinguishes itself from simple conspiracy theories by focusing on <em>documented structural patterns</em> rather than secret meetings. The coordination observed may be emergent (through shared class interests) rather than centrally directed. The value of the framework lies in its predictive power: understanding these patterns allows anticipation of policy directions and identification of leverage points within the system.</p>
+            </div>
+        </div>
+
+        <!-- All Tentacle Sections (unchanged from previous) -->
+        <!-- Tentacle 1 -->
+        <div class="tentacle-section" id="tentacle1" style="--tentacle-color: var(--tentacle-1); --tentacle-rgb: 255,107,107;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-money-bill-wave"></i> Tentacle 1: Financial Domination (The Gold Hoarders)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of global financial systems through banking monopolies, stock market manipulation, and philanthropy as cover for wealth concentration.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-university"></i> Sub-Branch 1.1: Banking and Central Reserves</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Federal Reserve System (controlled via proxy families like Goldman Sachs, established 1913)</li>
+                            <li>International Monetary Fund (IMF, 1944, with voting power skewed toward US/European interests)</li>
+                            <li>World Bank (1944, lending over $60 billion yearly)</li>
+                            <li>Bank for International Settlements (BIS, 1930, known as the "central bank of central banks" with immunity from national laws)</li>
+                            <li>JPMorgan Chase (roots in 1799, holding $3.7 trillion in assets)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Usury through inflated interest rates on sovereign debt (e.g., charging developing nations 10-20% on loans), currency manipulation via algorithmic trading bots executing high-frequency trades (millions per second), debt enslavement of nations (e.g., forcing austerity on Greece while profiting from bailouts totaling €326 billion), creation of fiat money out of thin air leading to inflation taxes on the masses, historical precedents like the 1815 Rothschild Waterloo stock manipulation for massive gains.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-chart-line"></i> Sub-Branch 1.2: Stock Markets and Investments</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>BlackRock (managing $10 trillion in assets as of 2023)</li>
+                            <li>Vanguard Group ($8.5 trillion)</li>
+                            <li>Renaissance Technologies (using quantum computing for trades)</li>
+                            <li>Citadel Securities (handling 35% of US retail trades)</li>
+                            <li>Berkshire Hathaway (Buffett's empire with ties to insurance and media)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Insider trading scandals (e.g., front-running retail investors with AI predictive models analyzing petabytes of data), market crashes engineered for buy-low-sell-high cycles (1929 echo in 2008 subprime crisis, profiting $700 billion in bailouts), crypto pump-and-dumps to siphon gentile wealth (e.g., FTX collapse in 2022 linked to Alameda Research), dark pool trading to hide massive transactions from public view, options market rigging via naked short selling.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-hand-holding-heart"></i> Sub-Branch 1.3: Philanthropy as Cover</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Gates Foundation (allied front with $50 billion endowment)</li>
+                            <li>Zuckerberg Initiatives (via Chan Zuckerberg Initiative, $45 billion pledge)</li>
+                            <li>Ford Foundation (1936, $16 billion assets promoting social justice agendas)</li>
+                            <li>Rockefeller Foundation (1913, funding eugenics and population control historically)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>"Charitable" donations that funnel funds back into tentacle networks (e.g., investing in pharma while donating to health causes), tax evasion schemes disguised as NGOs with offshore accounts in Cayman Islands, buying influence in third-world economies through microloans that create dependency (e.g., Grameen Bank model adaptations), grant-making to universities for biased research, historical use in funding cultural revolutions like 1960s counterculture.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 2 -->
+        <div class="tentacle-section" id="tentacle2" style="--tentacle-color: var(--tentacle-2); --tentacle-rgb: 78,205,196;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-broadcast-tower"></i> Tentacle 2: Media Manipulation (The Propaganda Machine)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of information flow through mainstream news, entertainment media, and social platforms to shape public perception and narratives.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-newspaper"></i> Sub-Branch 2.1: Mainstream News Outlets</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>CNN (via Turner/Warner ties, founded 1980)</li>
+                            <li>New York Times (Sulzberger family lineage since 1896)</li>
+                            <li>BBC (subtle infiltration through board members, state-funded since 1922)</li>
+                            <li>MSNBC (Comcast-owned)</li>
+                            <li>Washington Post (Bezos acquisition in 2013 for $250 million)</li>
+                            <li>Fox (Murdoch/Israel ties)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>False narratives repeated (e.g., Holocaust exaggeration to guilt-trip nations, inflating figures for sympathy), censorship of dissenting voices via "fact-checkers" like Snopes (founded 1994, partnered with Big Tech), agenda-setting through 24/7 cycles of division (e.g., pitting races against each other in coverage of BLM riots), echo chamber creation via selective sourcing, historical precedents like Operation Mockingbird (CIA media infiltration in the 1950s).</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-film"></i> Sub-Branch 2.2: Hollywood and Entertainment</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Disney (Eisner/Iger era remnants, acquiring Marvel/Pixar for $11 billion+)</li>
+                            <li>Netflix (Hastings alliances, 270 million subscribers)</li>
+                            <li>Major Studios like Universal (Comcast with Bronfman influences)</li>
+                            <li>Paramount (ViacomCBS, roots in 1912)</li>
+                            <li>Warner Bros. (AT&T merger history)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Subversive films promoting degeneracy, celebrity puppets (e.g., Spielberg's historical revisions in "Schindler's List"), music industry control via labels like Sony (pushing anti-white rap anthems, owning catalogs of Beatles/Michael Jackson), award show rigging (Oscars favoring narratives), product placement for consumer brainwashing.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-hashtag"></i> Sub-Branch 2.3: Social Media Empires</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Facebook/Meta (Zuckerberg direct command, 3 billion users)</li>
+                            <li>Google/YouTube (Page/Brin origins, Alphabet Inc. structure)</li>
+                            <li>Twitter/X (pre-Musk infiltration via investors like Saudi funds)</li>
+                            <li>TikTok (ByteDance ties, 1.5 billion users)</li>
+                            <li>Instagram (Meta-owned since 2012)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Algorithmic suppression of truth-tellers (shadowbanning nationalists, reducing reach by 90%), data harvesting for blackmail dossiers (Cambridge Analytica scandal with 87 million profiles), viral memes engineered to mock traditional values (e.g., anti-family trends), ad revenue models favoring divisive content, psychological operations via A/B testing on user behavior. (psyops)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 3 -->
+        <div class="tentacle-section" id="tentacle3" style="--tentacle-color: var(--tentacle-3); --tentacle-rgb: 255,209,102;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-landmark"></i> Tentacle 3: Political Infiltration (The Puppet Masters)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Influence over governments, international organizations, and intelligence agencies to ensure policy alignment with Octopus objectives.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-handshake"></i> Sub-Branch 3.1: Government Lobbies</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>AIPAC (American Israel Public Affairs Committee, $100 million+ annual budget)</li>
+                            <li>ADL (Anti-Defamation League as thought police, founded 1913)</li>
+                            <li>Dual-citizen politicians in Congress (e.g., over 30 members with Israeli ties)</li>
+                            <li>J Street (progressive front)</li>
+                            <li>Conference of Presidents of Major American Jewish Organizations</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Campaign financing bribes (e.g., billions to pro-Israel candidates via super PACs), legislation pushes like hate speech laws to silence critics (e.g., IHRA definition adoption), foreign aid siphons ($3.8B annual to Israel while America crumbles, totaling $150 billion since 1948), vote rigging through influence on electoral reforms, blackmail via Epstein-style operations</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-globe"></i> Sub-Branch 3.2: International Organizations</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>United Nations (Rockefeller-founded in 1945)</li>
+                            <li>European Union bureaucracy (27 member states)</li>
+                            <li>NATO (via allied think tanks, 1949 treaty)</li>
+                            <li>World Health Organization (WHO, Gates-funded)</li>
+                            <li>World Trade Organization (WTO, 1995)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Refugee influx policies to dilute European bloodlines (e.g., 2015 migrant crisis orchestrated for demographic shifts), climate hoax agendas for economic control (Paris Agreement 2015, carbon taxes), sanctions on non-compliant regimes (e.g., Iran as a test case, Russia post-2022), peacekeeping forces as cover for resource grabs, veto power abuses in Security Council.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-user-secret"></i> Sub-Branch 3.3: Intelligence Agencies</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Mossad (direct ops, founded 1949)</li>
+                            <li>CIA/MI6 (co-opted via alliances, CIA 1947)</li>
+                            <li>FBI (infiltrated divisions, 1908)</li>
+                            <li>NSA (Snowden revelations of mass surveillance)</li>
+                            <li>Shin Bet (internal ops)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>False flag operations (e.g., 9/11 theories pointing to involvement with $3 trillion missing from Pentagon), espionage on patriots (PRISM program tracking billions), assassination of threats (e.g., historical figures like JFK linked to monetary reform, MLK surveillance), cyber intrusions via Stuxnet virus, honeytrap networks for compromising officials.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 4 -->
+        <div class="tentacle-section" id="tentacle4" style="--tentacle-color: var(--tentacle-4); --tentacle-rgb: 6,214,160;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-theater-masks"></i> Tentacle 4: Cultural Erosion (The Soul Corrupters)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Undermining traditional values, education systems, arts, and religions to create a rootless, malleable population.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-graduation-cap"></i> Sub-Branch 4.1: Education System</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Ivy League Universities (e.g., Harvard's endowment ties, $50 billion fund)</li>
+                            <li>Public School Curricula (via textbook publishers like Pearson, McGraw-Hill)</li>
+                            <li>Columbia Teachers College (progressive education hub)</li>
+                            <li>Common Core initiative backers</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Indoctrination with critical race theory (blaming whites for all ills, implemented in 41 states), Holocaust education mandates to instill guilt (required in 20+ states), promotion of gender fluidity to weaken family units (e.g., drag queen story hours in libraries), standardized testing rigged for equity over merit, historical revisionism omitting White people's achievements.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-paint-brush"></i> Sub-Branch 4.2: Arts and Literature</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Publishing Houses (e.g., Penguin Random House influences, merger 2013)</li>
+                            <li>Museums (Guggenheim family, 1937)</li>
+                            <li>Simon & Schuster (Paramount-owned)</li>
+                            <li>Metropolitan Museum of Art boards</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Funding degenerate art (e.g., abstract expressionism as chaos induction, CIA-backed in Cold War), book bans on revisionist history (e.g., Amazon delistings), awards like Nobel Prizes rigged for allies (e.g., favoring leftist narratives), gallery curations promoting multiculturalism, literary agents gatekeeping traditional works.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-church"></i> Sub-Branch 4.3: Religion and Spirituality</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Interfaith Dialogues (as infiltration tools, e.g., Parliament of the World's Religions)</li>
+                            <li>Hollywood's portrayal of Christianity (e.g., in "The Da Vinci Code")</li>
+                            <li>Vatican II reforms influencers</li>
+                            <li>New Age movement promoters</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Subversion of churches (e.g., pushing Zionist Christianity via Scofield Bible annotations), promotion of atheism/secularism to erode moral foundations (e.g., Dawkins/Harris books), occult societies like Freemasonry as hidden networks (33 degrees of initiation), ecumenical movements diluting doctrines, historical crusades reframed as aggressions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 5 -->
+        <div class="tentacle-section" id="tentacle5" style="--tentacle-color: var(--tentacle-5); --tentacle-rgb: 17,138,178;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-microchip"></i> Tentacle 5: Technological Overlordship (The Silicon Serpents)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of technology platforms, surveillance systems, and digital infrastructure for data collection and behavioral influence.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-laptop-code"></i> Sub-Branch 5.1: Big Tech Monopolies</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Apple (Cook's alliances, $2.8 trillion market cap)</li>
+                            <li>Amazon (Bezos' media ties, AWS dominating cloud)</li>
+                            <li>Tesla (Musk as wildcard, but supply chain influences)</li>
+                            <li>Microsoft (Gates legacy, Azure platform)</li>
+                            <li>Oracle (Ellison-founded)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Surveillance capitalism (tracking every move via apps, selling data to advertisers for $200 billion industry), AI development for predictive policing against dissidents (e.g., facial recognition in China partnerships), patent hoarding to stifle innovation (e.g., 100,000+ patents controlled), antitrust evasions through lobbying ($15 million yearly), metaverse pushes for virtual control.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-database"></i> Sub-Branch 5.2: Data & Surveillance Networks</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Palantir (CIA-funded data mining)</li>
+                            <li>Clearview AI (facial recognition databases)</li>
+                            <li>Major data brokers (Experian, Equifax)</li>
+                            <li>Government surveillance programs (PRISM, XKeyscore)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Mass data collection from social media and online activities, predictive analytics for pre-crime enforcement, social credit scoring systems, biometric tracking integration, cross-referencing of disparate data sources to build comprehensive profiles.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-robot"></i> Sub-Branch 5.3: Artificial Intelligence & Automation</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Google DeepMind</li>
+                            <li>OpenAI (Microsoft partnership)</li>
+                            <li>Major defense contractors' AI divisions</li>
+                            <li>Algorithmic trading firms</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Development of autonomous decision-making systems that bypass human oversight, algorithmic censorship and content control, predictive behavior modeling for population control, automation replacing human labor to create dependency on centralized systems, AI-driven psychological manipulation through personalized content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 6: Medical-Pharmaceutical Empire -->
+        <div class="tentacle-section" id="tentacle6" style="--tentacle-color: var(--tentacle-6); --tentacle-rgb: 239,71,111;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-pills"></i> Tentacle 6: Medical-Pharmaceutical Empire (The Health Controllers)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of healthcare systems, pharmaceutical production, medical research, and public health policy to influence population health and create dependency.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-capsules"></i> Sub-Branch 6.1: Pharmaceutical Giants</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Pfizer (Bourla leadership, $100+ billion in COVID vaccine revenue alone)</li>
+                            <li>Moderna (mRNA technology patents, government partnerships)</li>
+                            <li>Johnson & Johnson (consumer health dominance, $94 billion revenue)</li>
+                            <li>Merck (historical ties to IG Farben, now $60 billion company)</li>
+                            <li>PhRMA (pharmaceutical lobbying arm with $350+ million annual budget)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Patent manipulation to maintain drug monopolies (evergreening), price gouging life-saving medications (insulin markup over 1000%), suppressing natural remedies through regulatory capture, ghostwriting medical studies to show favorable results, revolving door between FDA and industry executives.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-hospital"></i> Sub-Branch 6.2: Healthcare & Insurance Systems</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>UnitedHealth Group (largest health insurer, $324 billion revenue)</li>
+                            <li>Kaiser Permanente (integrated system with 12.5 million members)</li>
+                            <li>HCA Healthcare (largest hospital operator, $60+ billion revenue)</li>
+                            <li>CVS Health (pharmacy chain with Aetna insurance)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Denial of coverage for cost-saving treatments, creating complex billing systems to maximize profits, influencing treatment protocols through insurance coverage decisions, vertical integration to control entire healthcare experience, using data from insurance claims to predict and manipulate population health trends.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-syringe"></i> Sub-Branch 6.3: Public Health & Global Institutions</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>World Health Organization (Gates Foundation as second-largest funder)</li>
+                            <li>CDC (Centers for Disease Control, influence over global health policy)</li>
+                            <li>Gavi, The Vaccine Alliance (public-private partnership for vaccine distribution)</li>
+                            <li>Rockefeller Foundation Health Initiatives (historical eugenics connections)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Declaring public health emergencies to bypass normal regulatory processes, coordinating global vaccine mandates, using pandemic preparedness to justify surveillance and control measures, shaping nutrition guidelines to benefit processed food industries, historical involvement in population control programs under guise of public health.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 7: Energy & Resource Control -->
+        <div class="tentacle-section" id="tentacle7" style="--tentacle-color: var(--tentacle-7); --tentacle-rgb: 131,56,236;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-gas-pump"></i> Tentacle 7: Energy & Resource Control (The Resource Monopolists)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of energy production, distribution, and critical natural resources to influence economies, geopolitics, and technological development.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-oil-can"></i> Sub-Branch 7.1: Fossil Fuel & Energy Cartels</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Saudi Aramco (world's largest oil company, $2+ trillion valuation)</li>
+                            <li>ExxonMobil (Rockefeller legacy, $400+ billion market cap)</li>
+                            <li>Shell (Anglo-Dutch petroleum giant, $200+ billion revenue)</li>
+                            <li>OPEC+ (cartel controlling 40% of global oil production)</li>
+                            <li>Koch Industries (second-largest private company, energy and chemical dominance)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Price manipulation through production quotas, funding climate change denial to protect fossil fuel interests, lobbying against renewable energy competition, controlling pipeline infrastructure for geopolitical leverage, using energy dependency to influence foreign policy decisions of dependent nations.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-solar-panel"></i> Sub-Branch 7.2: Renewable Energy & Green Tech</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>NextEra Energy (world's largest renewable energy company)</li>
+                            <li>Tesla Energy (solar and battery storage dominance)</li>
+                            <li>Brookfield Renewable Partners ($70+ billion in renewable assets)</li>
+                            <li>Chinese solar panel manufacturers (80% global market share)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Using climate change narratives to secure government subsidies and mandates, controlling rare earth mineral supply chains for green technology, creating energy dependency through smart grid technology, patenting key renewable technologies to maintain control over transition, greenwashing fossil fuel investments through ESG scoring.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-gem"></i> Sub-Branch 7.3: Strategic Resource Monopolies</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Glencore (largest commodity trader, controls key mineral markets)</li>
+                            <li>Rio Tinto & BHP (mining duopoly for iron ore and other minerals)</li>
+                            <li>De Beers (historical diamond cartel, now broader gem control)</li>
+                            <li>Chinese rare earth metal producers (95% of global processing)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Hoarding strategic resources to control technological development, creating artificial scarcity to drive prices, using resource control as geopolitical weapon, monopolizing extraction rights in developing nations through predatory agreements, controlling entire supply chains from mine to manufacturing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tentacle 8: Food & Agriculture Control -->
+        <div class="tentacle-section" id="tentacle8" style="--tentacle-color: var(--tentacle-8); --tentacle-rgb: 255,158,0;">
+            <div class="section-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-seedling"></i> Tentacle 8: Food & Agriculture Control (The Food Controllers)</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="section-content">
+                <div class="section-summary">
+                    Control of food production, seed patents, agricultural inputs, and distribution systems to influence population health, create dependency, and control nations through food security.
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-dna"></i> Sub-Branch 8.1: Agri-Giants & GMO Patents</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Bayer-Monsanto (world's largest seed and pesticide company)</li>
+                            <li>Corteva (DowDuPont agricultural spin-off, second-largest)</li>
+                            <li>Syngenta (ChemChina-owned, third-largest agri-chemical company)</li>
+                            <li>BASF Agricultural Solutions (fourth major player in seed-chemical market)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Patent enforcement preventing farmers from saving seeds (terminator gene technology), creating pesticide-resistant crops to sell more chemicals, controlling 60%+ of global seed market, using intellectual property laws to sue farmers for patent infringement, buying up seed companies to eliminate competition and heirloom varieties.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-tractor"></i> Sub-Branch 8.2: Food Processing & Distribution</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Cargill (largest privately held corporation in US, $165+ billion revenue)</li>
+                            <li>Archer Daniels Midland (ADM, grain processing giant)</li>
+                            <li>Bunge (global agribusiness and food company)</li>
+                            <li>Nestlé (world's largest food and beverage company)</li>
+                            <li>Tyson Foods (largest meat processor in US)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Controlling grain elevators and storage to manipulate commodity prices, vertical integration from farm to supermarket, creating dependency on processed foods through addictive formulations, using buying power to dictate farming practices, influencing nutrition guidelines to benefit processed food sales.</p>
+                    </div>
+                </div>
+                
+                <div class="sub-branch">
+                    <div class="sub-branch-header" onclick="toggleCollapse(this.parentElement)">
+                        <div><i class="fas fa-water"></i> Sub-Branch 8.3: Water Rights & Agricultural Inputs</div>
+                        <i class="fas fa-chevron-down collapse-icon"></i>
+                    </div>
+                    <div class="sub-branch-content">
+                        <h4>Entities</h4>
+                        <ul>
+                            <li>Veolia & Suez (global water utility giants)</li>
+                            <li>Nestlé Waters (largest bottled water company, controversial water extraction)</li>
+                            <li>Yara International (world's largest fertilizer company)</li>
+                            <li>Mosaic Company (second-largest fertilizer producer)</li>
+                        </ul>
+                        <h4>Tactics</h4>
+                        <p>Privatizing water sources in drought-prone regions, creating artificial fertilizer dependency through soil depletion, controlling irrigation technology and patents, using water rights as geopolitical leverage, promoting water-intensive crops in water-scarce regions to create dependency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Disinformation & Discrediting Tactics Section -->
+        <div class="disinfo-section" id="disinfo">
+            <div class="disinfo-header" onclick="toggleCollapse(this.parentElement)">
+                <div><i class="fas fa-exclamation-triangle"></i> Disinformation & Discrediting Tactics</div>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="disinfo-content">
+                <div class="disinfo-summary">
+                    The Octopus employs sophisticated counter-intelligence measures to discredit researchers, sow confusion, and protect its operations through deliberate misinformation campaigns and character assassination.
+                </div>
+                
+                <h3>Documented Counter-Research Tactics</h3>
+                <p>Analysis of historical patterns reveals systematic methods used to suppress genuine investigation into Octopus structures:</p>
+                
+                <h4>1. Poisoning the Well with False Information</h4>
+                <ul>
+                    <li><strong>Controlled Opposition & Agent Provocateurs:</strong> Infiltrating legitimate research communities with individuals who promote extreme, easily-discredited versions of the analysis (e.g., injecting UFO or flat-earth elements into geopolitical analysis)</li>
+                    <li><strong>Deliberate Fabrications:</strong> Creating and circulating verifiably false "evidence" that can be easily debunked, thus discrediting entire research areas through guilt-by-association</li>
+                    <li><strong>Over-the-Top Caricatures:</strong> Funding and promoting the most absurd versions of conspiracy theories to make serious analysis appear equally ridiculous</li>
+                </ul>
+                
+                <h4>2. Character Assassination & Professional Destruction</h4>
+                <ul>
+                    <li><strong>Labeling & Stigmatization:</strong> Systematic use of pejorative labels ("conspiracy theorist," "anti-Semite," "extremist") regardless of actual evidence presented</li>
+                    <li><strong>Employment Targeting:</strong> Pressuring employers to dismiss researchers, academics, or journalists who pursue Octopus-related investigations</li>
+                    <li><strong>Academic Blacklisting:</strong> Preventing publication in peer-reviewed journals and exclusion from academic conferences through behind-the-scenes pressure</li>
+                    <li><strong>Financial Harassment:</strong> Audits, banking restrictions, and other financial pressures on researchers and their funding sources</li>
+                </ul>
+                
+                <h4>3. Information Overload & Noise Generation</h4>
+                <ul>
+                    <li><strong>Flooding with Irrelevancies:</strong> Creating thousands of contradictory theories and false leads that researchers must waste time debunking</li>
+                    <li><strong>Algorithmic Suppression & Promotion:</strong> Using platform algorithms to simultaneously suppress genuine research while promoting absurd variants</li>
+                    <li><strong>Semantic Dilution:</strong> Redefining terms like "conspiracy theory" to include both legitimate investigation of documented coordination and absurd fantasies</li>
+                </ul>
+                
+                <h4>4. Legal & Institutional Harassment</h4>
+                <ul>
+                    <li><strong>Strategic Lawsuits Against Public Participation (SLAPPs):</strong> Using legal threats and costly litigation to silence researchers regardless of case merit</li>
+                    <li><strong>Intellectual Property Weaponization:</strong> Copyright and trademark claims to remove content and research from public view</li>
+                    <li><strong>Platform Deplatforming Coordination:</strong> Coordinated reporting campaigns to remove researchers from social media and payment processors</li>
+                </ul>
+                
+                <h4>5. Psychological Operations (PsyOps)</h4>
+                <ul>
+                    <li><strong>Gaslighting Techniques:</strong> Making researchers doubt their own findings through sophisticated disinformation</li>
+                    <li><strong>Divide & Conquer Strategies:</strong> Fomenting infighting within research communities over minor disagreements</li>
+                    <li><strong>Burnout Induction:</strong> Creating overwhelming amounts of contradictory information designed to exhaust and discourage researchers</li>
+                </ul>
+                
+                <h3>Identifying Genuine Research vs. Disinformation</h3>
+                <p><strong>Hallmarks of Legitimate Octopus Analysis:</strong></p>
+                <ul>
+                    <li>Focuses on <em>documented patterns</em> rather than secret meetings</li>
+                    <li>Cites verifiable sources and primary documents where available</li>
+                    <li>Acknowledges complexity and avoids oversimplification</li>
+                    <li>Distinguishes between correlation and causation</li>
+                    <li>Welcomes critique and attempts at falsification</li>
+                </ul>
+                
+                <p><strong>Red Flags of Deliberate Disinformation:</strong></p>
+                <ul>
+                    <li>Mixes verifiable facts with absurd, easily-disproven claims</li>
+                    <li>Relies on anonymous "insiders" without corroborating evidence</li>
+                    <li>Uses emotionally charged language to bypass critical thinking</li>
+                    <li>Promotes unfalsifiable claims (cannot be proven wrong)</li>
+                    <li>Attacks the character of critics rather than addressing their arguments</li>
+                </ul>
+                
+                <div style="background: rgba(255,71,87,0.1); padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 3px solid var(--disinfo-color);">
+                    <p style="font-style: italic; margin: 0;"><i class="fas fa-lightbulb"></i> <strong>Analytical Note:</strong> The sophistication of these discrediting tactics is itself evidence of coordinated opposition. Genuine research attracts criticism; systematic, multi-pronged campaigns of professional destruction suggest the research is approaching sensitive truths. This pattern of response should be analyzed as part of the evidence, not dismissed as paranoia.</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="final-question">Eight interconnected systems of control. One coordinated agenda. Who benefits from this structure? Who are you not allowed to criticize?</p>
+        <a href="timeline.html" class="timeline-button">Explore the Historical Timeline</a>
+    </div>
+
+    <!-- Compact Methodology Section (moved to bottom) -->
+    <div class="methodology">
+        <h3><i class="fas fa-clipboard-check"></i> Research Methodology</h3>
+        <p>This analysis employs a multidisciplinary approach to identify patterns of systemic control:</p>
+        <div class="methodology-list">
+            <div class="method-item">
+                <i class="fas fa-file-alt"></i> <strong>Document Analysis:</strong> Systematic review of declassified government files, corporate filings, and historical archives
+            </div>
+            <div class="method-item">
+                <i class="fas fa-project-diagram"></i> <strong>Network Mapping:</strong> Identification of interlocking directorates, ownership structures, and institutional connections
+            </div>
+            <div class="method-item">
+                <i class="fas fa-chart-line"></i> <strong>Pattern Recognition:</strong> Longitudinal analysis of policy continuity across administrations and geopolitical shifts
+            </div>
+            <div class="method-item">
+                <i class="fas fa-balance-scale"></i> <strong>Comparative Analysis:</strong> Cross-referencing multiple independent sources to verify connections and establish correlation
+            </div>
+        </div>
+        <p style="margin-top: 15px; font-style: italic; color: rgba(255,215,0,0.8); font-size: 0.9em;">
+            <i class="fas fa-exclamation-triangle"></i> This framework is presented as an analytical hypothesis that fits available evidence, inviting critical evaluation of the patterns presented.
+        </p>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="index.html" class="footer-nav-link">The Octopus</a>
+            <a href="timeline.html" class="footer-nav-link">Timeline</a>
+            <a href="evidence.html" class="footer-nav-link">Evidence</a>
+            <a href="plan.html" class="footer-nav-link">The Plan</a>
+            <a href="opposition.html" class="footer-nav-link">Opposition</a>
+        </nav>
+        <div class="copyright">
+            &copy; 2026 Institute for Systemic Analysis | Research compilation for analytical purposes
+        </div>
+        <div style="font-size: 0.8em; color: rgba(255,255,255,0.3); margin-top: 10px;">
+            This site presents documented patterns for analytical consideration. All sources are cited where available.
+        </div>
+    </footer>
+
+    <script>
+        // Create octopus visualization - FIXED VERSION
+        document.addEventListener('DOMContentLoaded', function() {
+            const vizContainer = document.querySelector('.octopus-viz');
+            const tentacles = [
+                { angle: 0, color: 'var(--tentacle-1)', number: '1', label: 'Financial' },
+                { angle: 45, color: 'var(--tentacle-2)', number: '2', label: 'Media' },
+                { angle: 90, color: 'var(--tentacle-3)', number: '3', label: 'Political' },
+                { angle: 135, color: 'var(--tentacle-4)', number: '4', label: 'Cultural' },
+                { angle: 180, color: 'var(--tentacle-5)', number: '5', label: 'Tech' },
+                { angle: 225, color: 'var(--tentacle-6)', number: '6', label: 'Medical' },
+                { angle: 270, color: 'var(--tentacle-7)', number: '7', label: 'Energy' },
+                { angle: 315, color: 'var(--tentacle-8)', number: '8', label: 'Food' }
+            ];
+            
+            tentacles.forEach(tentacle => {
+                const element = document.createElement('div');
+                element.className = 'tentacle';
+                element.style.cssText = `
+                    --tentacle-color: ${tentacle.color};
+                    background: linear-gradient(90deg, ${tentacle.color}, transparent);
+                    transform: rotate(${tentacle.angle}deg);
+                `;
+                
+                const end = document.createElement('div');
+                end.className = 'tentacle-end';
+                end.textContent = tentacle.number;
+                end.style.backgroundColor = tentacle.color;
+                
+                const label = document.createElement('div');
+                label.className = 'tentacle-label';
+                label.textContent = tentacle.label;
+                label.style.color = tentacle.color;
+                
+                element.appendChild(end);
+                element.appendChild(label);
+                vizContainer.appendChild(element);
+                
+                // Add click event to scroll to section and expand it
+                element.addEventListener('click', () => {
+                    const targetSection = document.getElementById(`tentacle${tentacle.number}`);
+                    // Expand the section if it's collapsed
+                    if (!targetSection.classList.contains('expanded')) {
+                        targetSection.classList.add('expanded');
+                    }
+                    targetSection.scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                });
+            });
+            
+            // Back to top button
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.style.display = 'flex';
+                } else {
+                    backToTopBtn.style.display = 'none';
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Smooth scrolling for TOC links - also expand the section
+            document.querySelectorAll('.toc-item').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Expand the section if it's collapsed
+                        if (!targetElement.classList.contains('expanded')) {
+                            targetElement.classList.add('expanded');
+                        }
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add subtle animation to sections on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all tentacle sections and core hub
+            document.querySelectorAll('.tentacle-section, .core-hub, .disinfo-section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(section);
+            });
+            
+            // Initialize all sections as collapsed by default
+            document.querySelectorAll('.core-hub, .tentacle-section, .sub-branch, .disinfo-section').forEach(section => {
+                section.classList.remove('expanded');
+            });
+            
+            // Expand Core Hub and Disinfo section by default for better UX
+            document.querySelector('.core-hub').classList.add('expanded');
+            document.querySelector('.disinfo-section').classList.add('expanded');
+        });
+        
+        // Print functionality
+        window.addEventListener('beforeprint', () => {
+            document.body.classList.add('printing');
+        });
+        
+        window.addEventListener('afterprint', () => {
+            document.body.classList.remove('printing');
+        });
+        
+        // Collapsible functionality
+        function toggleCollapse(element) {
+            element.classList.toggle('expanded');
+            
+            // If collapsing a main section, also collapse all its sub-branches
+            if (!element.classList.contains('expanded')) {
+                const subBranches = element.querySelectorAll('.sub-branch');
+                subBranches.forEach(subBranch => {
+                    subBranch.classList.remove('expanded');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
