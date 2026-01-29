@@ -190,6 +190,14 @@
         .disinfo-content {
             overflow: hidden;
             transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .expanded .disinfo-content {
+            max-height: 5000px;
+            opacity: 1;
+            margin-top: 15px;
         }
         
         .disinfo-summary {
@@ -1169,22 +1177,19 @@
     </div>
 
     <div id="content">
-        <!-- Executive Summary -->
+        <!-- Executive Summary - CONCISE VERSION -->
         <div class="executive-summary">
             <h2 style="--tentacle-color: var(--glow-color); text-align: center; border-bottom: none;">
                 <i class="fas fa-eye"></i> The Octopus Unveiled: An Overview
             </h2>
             <p>
-                <strong>The Octopus</strong> is a structural analysis framework revealing consistent patterns of systemic control across eight interconnected domains of global power. Our research identifies a coordinated network—termed the Central Nexus—that operates through eight distinct yet interconnected Tentacles of power: Financial, Media, Political, Cultural, Technological, Medical, Energy, and Agricultural. This analytical model demonstrates how these systems interact to concentrate power and influence modern society.
+                <strong>The Octopus</strong> is an analytical framework revealing systemic control across eight interconnected domains of global power. Our research identifies a Central Nexus coordinating eight Tentacles: Financial, Media, Political, Cultural, Technological, Medical, Energy, and Agricultural. This model demonstrates how these systems interact to concentrate power and influence society.
             </p>
             <p>
-                The available evidence, spanning over a century and involving more than 150 documented entities, shows a consistent pattern: the centralization of decision-making power, the erosion of national and cultural sovereignty, and the creation of institutional dependencies that limit autonomous action. This analysis does not presuppose a singular "conspiracy" but rather identifies structural incentives and documented coordination between ostensibly separate systems.
-            </p>
-            <p>
-                The ultimate objective suggested by this pattern analysis is the establishment of an integrated control framework—a system where human autonomy is systematically reduced through dependencies, populations are managed through predictive modeling, and resources flow toward increasingly centralized decision-making nodes.
+                Evidence spanning a century and over 150 documented entities shows consistent patterns: centralization of decision-making power, erosion of sovereignty, and creation of institutional dependencies. The analysis identifies structural coordination between systems, suggesting movement toward an integrated control framework that reduces autonomy and centralizes decision-making.
             </p>
             <p style="font-style: italic; color: rgba(255,215,0,0.9); border-left: 3px solid var(--glow-color); padding-left: 15px;">
-                This site synthesizes decades of documented research to map the structural relationships, historical patterns, and institutional connections that constitute the Octopus framework. What follows is a detailed anatomy of its Core Hub and eight primary Tentacles. Explore them to understand <strong>not just who holds power, but the structural mechanisms that make that power possible and persistent.</strong>
+                This site maps the structural relationships of the Octopus framework. Explore the Core Hub and eight Tentacles to understand <strong>the mechanisms that make power possible and persistent.</strong>
             </p>
         </div>
 
@@ -1770,7 +1775,7 @@
             </div>
         </div>
 
-        <!-- NEW: Disinformation & Discrediting Tactics Section -->
+        <!-- NEW: Disinformation & Discrediting Tactics Section - COLLAPSED BY DEFAULT -->
         <div class="disinfo-section" id="disinfo">
             <div class="disinfo-header" onclick="toggleCollapse(this.parentElement)">
                 <div><i class="fas fa-exclamation-triangle"></i> Disinformation & Discrediting Tactics</div>
@@ -2006,9 +2011,9 @@
                 section.classList.remove('expanded');
             });
             
-            // Expand Core Hub and Disinfo section by default for better UX
+            // Expand Core Hub by default for better UX
+            // DISINFORMATION SECTION IS NOW COLLAPSED BY DEFAULT (not expanded)
             document.querySelector('.core-hub').classList.add('expanded');
-            document.querySelector('.disinfo-section').classList.add('expanded');
         });
         
         // Print functionality
